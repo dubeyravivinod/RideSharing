@@ -1,34 +1,71 @@
-# Pre-requisites
-* Python 3.8/3.9
-* Pip
+# Context
+Once upon a time, there was a group of entrepreneurs who were busy building a new ride-sharing service. They were working tirelessly to make sure that their service was the best it could be for their riders (i.e passengers) and drivers. However, they knew that there was one important feature missing, the ability to match riders with drivers within a 5km range (inclusive).
+ 
+ One day, they realized that they needed to implement this feature as soon as possible, and they needed someone to take on the challenge of creating it. Can you help them to complete this?
+ 
+### Euclidean Distance Formula
+ For ease of calculation, this service assumes a Cartesian coordinate system to represent locations, where the location of drivers and riders are represented as a Point(x, y). The Euclidean distance is utilized to calculate the distance between any two points, and 1 unit is equivalent to 1 km.
+ 
+ The Euclidean distance formula says:
+ 
+d = √[ (x2–x1)2 + (y2–y1)2]
+ where,
+ 
+ (x1, y1) are the coordinates of one point. 
+ (x2, y2) are the coordinates of the other point. 
+ d is the distance between (x1, y1) and (x2, y2).
+ 
+## Goal
+ Your task is to build a solution that will help to match riders with drivers based on their location and generate a bill for the ride. 
+ 
+## Assumptions
+ It is guaranteed that no two drivers or riders will have the same id. 
+ Ride can only be started once the match is completed. 
+ Every start ride request will happen after the match request. 
+ Every start ride request will have a valid rider id. 
+ One rider can make multiple match requests. 
+ Bill for the ride will be calculated based on the distance between the rider's location and the destination. 
+ Bill can only be generated after the ride is completed. 
+ The driver will not be available to accept another rider's request after the ride has started. 
+ Time taken for a ride cannot be negative. 
+ All floating point numerical values must be rounded to two decimal places.
 
-# How to run the code
-
-We have provided scripts to execute the code. 
-
-Use `run.sh` if you are Linux/Unix/macOS Operating systems and `run.bat` if you are on Windows.  Both the files run the commands silently and prints only output from the input file `sample_input/input1.txt`. You are supposed to add the input commands in the file from the appropriate problem statement. 
-
-Internally both the scripts run the following commands 
-
- * `pip install -r requirements.txt` - This will install the dependencies mentioned in the requirement.file
- * `python -m geektrust sample_input/input1.txt` - This will run the solution passing in the sample input file as the command line argument
-
-If you are providing a solution without using the build file, we want you to name your Main file as geektrust.py. This is the file that will contain your main method.
-
- We expect your program to take the location to the text file as parameter. Input needs to be read from a text file, and output should be printed to the console. The text file will contain only commands in the format prescribed by the respective problem.
-
- # Running the code for multiple test cases
-
- Please fill `input1.txt` and `input2.txt` with the input commands and use those files in `run.bat` or `run.sh`. Replace `python -m geektrust sample_input/input1.txt` with `python -m geektrust sample_input/input2.txt` to run the test case from the second file. 
-
- # How to execute the unit tests
-
- `python -m unittest discover` will execute the unit test cases.
-
- The unit test coverage is found by the command :
-`coverage run -m unittest discover`
-
-# Help
-
-You can refer our help documents [here](https://help.geektrust.com)
-You can read build instructions [here](https://github.com/geektrust/coding-problem-artefacts/tree/master/Python)
+```
+Input Commands & Format
+ADD_DRIVER <DRIVER_ID> <X_COORDINATE> <Y_COORDINATE>
+ 
+ The ADD_DRIVER command allows a driver to join the service. The command should take in the driver's id and current location (x_coordinate and y_coordinate) as arguments.
+ 
+ADD_RIDER <RIDER_ID> <X_COORDINATE> <Y_COORDINATE>
+ 
+ The ADD_RIDER command allows a rider to request a ride. The command should take in the rider's id, current location (x_coordinate and y_coordinate), as arguments.
+ 
+MATCH <RIDER_ID>
+ 
+ Matches the rider with the nearest available drivers within 5 kms distance. Print nearest 5 drivers ids in ascending order of their distance from the rider in the following format. In the event of multiple drivers being equidistant, print them in lexicographical order.:
+ 
+ DRIVERS_MATCHED <DRIVER_ID1> <DRIVER_ID2> ... <DRIVER_ID5> 
+ If no drivers are available then print ‘NO_DRIVERS_AVAILABLE’
+ 
+START_RIDE <RIDE_ID> <N> <RIDER_ID>
+ 
+ Start the ride with the Nth Driver (1 >= N <= 5). If the match has fewer than N number of drivers, driver is not available, or <RIDE_ID> already exists, then print ‘INVALID_RIDE’ otherwise, print ‘RIDE_STARTED <RIDE_ID>’.
+ 
+STOP_RIDE <RIDE_ID> <DESTINATION_X_COORDINATE> <DESTINATION_Y_COORDINATE> <TIME_TAKEN_IN_MIN>
+ 
+ If the <RIDE_ID> does not exist, or the ride is already stopped, then print ‘INVALID_RIDE’, otherwise, Print ‘RIDE_STOPPED <RIDE_ID>’
+ 
+BILL <RIDE_ID>
+ 
+ Print the total bill of the ride in the format ‘BILL <RIDE_ID> <DRIVER_ID> <AMOUNT>’. To calculate the total bill use the following formula: 
+ 
+ A base fare of ₹50 is charged for every ride. 
+ An additional ₹6.5 is charged for every kilometer traveled. 
+ An additional ₹2 is charged for every minute spent in the ride. 
+ A service tax of 20% is added to the final amount.
+ 
+ Note:
+ 
+ If the ride is not completed then print “RIDE_NOT_COMPLETED” 
+ If the <RIDE_ID> does not exist, then print ‘INVALID_RIDE’
+ ```
